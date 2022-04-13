@@ -30,6 +30,8 @@ macro_rules! abort {
 pub fn invoke(_: u32) -> u32 {
     match sdk::message::method_number() {
         1 => {
+            // TODO a duplicate constructor invocation will reset state
+            //      this should check if the state already exists and fail if that's the case
             constructor();
             return NO_DATA_BLOCK_ID;
         }
