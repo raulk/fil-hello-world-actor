@@ -32,8 +32,8 @@ pub fn invoke(_: u32) -> u32 {
         1 => {
             constructor();
             return NO_DATA_BLOCK_ID;
-        },
-        2 => {}, // fallthrough
+        }
+        2 => {} // fallthrough
         _ => {
             abort!(USR_UNHANDLED_MESSAGE, "unrecognized method");
         }
