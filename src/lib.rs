@@ -9,6 +9,7 @@ use fvm_sdk as sdk;
 use fvm_sdk::message::NO_DATA_BLOCK_ID;
 
 /// A macro to abort concisely.
+/// This should be part of the SDK as it's very handy.
 macro_rules! abort {
     ($code:ident, $msg:literal $(, $ex:expr)*) => {
         fvm_sdk::vm::abort(
@@ -24,6 +25,9 @@ pub struct State {
     pub count: u64,
 }
 
+/// We should probably have a derive macro to mark an object as a state object,
+/// and have load and save methods automatically generated for them as part of a
+/// StateObject trait (i.e. impl StateObject for State).
 impl State {
     pub fn load() -> Self {
         // First, load the current state root.
@@ -60,6 +64,10 @@ impl State {
 /// The actor's WASM entrypoint. It takes the ID of the parameters block,
 /// and returns the ID of the return value block, or NO_DATA_BLOCK_ID if no
 /// return value.
+///
+/// Should probably have macros similar to the ones on fvm.filecoin.io snippets.
+/// Put all methods inside an impl struct and annotate it with a derive macro
+/// that handles state serde and dispatch.
 #[no_mangle]
 pub fn invoke(_: u32) -> u32 {
     // Conduct method dispatch. Handle input parameters and return data.
@@ -80,12 +88,17 @@ pub fn invoke(_: u32) -> u32 {
     }
 }
 
+/// The constructor populates the initial state.
+///
+/// Method num 1. This is part of the Filecoin calling convention.
+/// InitActor#Exec will call the constructor on method_num = 1.
 pub fn constructor() -> Option<RawBytes> {
     let state = State::default();
     state.save();
     None
 }
 
+/// Method num 2.
 pub fn say_hello() -> Option<RawBytes> {
     let mut state = State::load();
     state.count += 1;
