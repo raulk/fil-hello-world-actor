@@ -7,6 +7,7 @@ use fvm_ipld_encoding::tuple::{Deserialize_tuple, Serialize_tuple};
 use fvm_ipld_encoding::{to_vec, CborStore, RawBytes, DAG_CBOR};
 use fvm_sdk as sdk;
 use fvm_sdk::message::NO_DATA_BLOCK_ID;
+use fvm_shared::ActorID;
 
 /// A macro to abort concisely.
 /// This should be part of the SDK as it's very handy.
@@ -93,6 +94,16 @@ pub fn invoke(_: u32) -> u32 {
 /// Method num 1. This is part of the Filecoin calling convention.
 /// InitActor#Exec will call the constructor on method_num = 1.
 pub fn constructor() -> Option<RawBytes> {
+    // This constant should be part of the SDK.
+    const INIT_ACTOR_ADDR: ActorID = 1;
+
+    // Should add SDK sugar to perform ACL checks more succinctly.
+    // i.e. the equivalent of the validate_* builtin-actors runtime methods.
+    // https://github.com/filecoin-project/builtin-actors/blob/master/actors/runtime/src/runtime/fvm.rs#L110-L146
+    if sdk::message::caller() != INIT_ACTOR_ADDR {
+        abort!(USR_FORBIDDEN, "constructor invoked by non-init actor");
+    }
+
     let state = State::default();
     state.save();
     None
