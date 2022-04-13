@@ -28,6 +28,17 @@ macro_rules! abort {
 /// return value.
 #[no_mangle]
 pub fn invoke(_: u32) -> u32 {
+    match sdk::message::method_number() {
+        1 => {
+            constructor();
+            return NO_DATA_BLOCK_ID;
+        },
+        2 => {}, // fallthrough
+        _ => {
+            abort!(USR_UNHANDLED_MESSAGE, "unrecognized method");
+        }
+    }
+
     // First, load the current state root.
     let root = match sdk::sself::root() {
         Ok(root) => root,
@@ -42,11 +53,7 @@ pub fn invoke(_: u32) -> u32 {
     };
 
     // Conduct method dispatch. Handle input parameters and return data.
-    let ret: Option<RawBytes> = match sdk::message::method_number() {
-        1 => constructor(),
-        2 => say_hello(state),
-        _ => abort!(USR_UNHANDLED_MESSAGE, "unrecognized method"),
-    };
+    let ret: Option<RawBytes> = say_hello(state);
 
     // Insert the return data block if necessary, and return the correct
     // block ID.
