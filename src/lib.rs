@@ -6,7 +6,7 @@ use cid::Cid;
 use fvm_ipld_encoding::tuple::{Deserialize_tuple, Serialize_tuple};
 use fvm_ipld_encoding::{to_vec, CborStore, RawBytes, DAG_CBOR};
 use fvm_sdk as sdk;
-use fvm_sdk::message::NO_DATA_BLOCK_ID;
+use fvm_sdk::NO_DATA_BLOCK_ID;
 use fvm_shared::ActorID;
 
 /// A macro to abort concisely.
