@@ -12,7 +12,7 @@ cargo build
 
 2. Set up a Lotus devnet
 
-You should use checkout the `experimental/fvm-m2` branch, and build from source -- follow the instructions [here](https://lotus.filecoin.io/developers/local-network/)
+You should use checkout the `experimental/fvm-m2` branch, and build from source -- follow the instructions [here](https://lotus.filecoin.io/developers/local-network/).
 
 3. _Install_ the actor.
 
