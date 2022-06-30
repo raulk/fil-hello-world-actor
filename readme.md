@@ -21,7 +21,7 @@ lotus chain install-actor <path-to-wasm-bytecode>
 
 ```
 
-Here `path-to-wasm-bytecode = ./target/debug/wbuild/fil-hello-world-actor/fil-hellow-world-actor.compact.wasm`
+Here `path-to-wasm-bytecode = /target/debug/wbuild/fil_hello_world_actor/fil_hello_world_actor.compact.wasm`
 
 You should see an actor code CID printed.
 
